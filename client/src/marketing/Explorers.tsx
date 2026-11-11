@@ -91,6 +91,11 @@ export function Applications({ onAction }: ExplorerProps) {
       setSearch('');
       setRelatedIds(new Set(appIds));
     };
+    const handleCompareShowAll = () => {
+      setCategory('all');
+      setSearch('');
+      setRelatedIds(null);
+    };
     const handleComparisonChange = (event: Event) => {
       const appIds = getVerifiedComparisonAppIds((event as CustomEvent<unknown>).detail);
       if (appIds === null) return;
@@ -98,10 +103,12 @@ export function Applications({ onAction }: ExplorerProps) {
     };
     window.addEventListener('berriq:explore-app', handleExplore);
     window.addEventListener('berriq:compare-apps', handleCompare);
+    window.addEventListener('berriq:compare-show-all', handleCompareShowAll);
     window.addEventListener('berriq:compare-selection', handleComparisonChange);
     return () => {
       window.removeEventListener('berriq:explore-app', handleExplore);
       window.removeEventListener('berriq:compare-apps', handleCompare);
+      window.removeEventListener('berriq:compare-show-all', handleCompareShowAll);
       window.removeEventListener('berriq:compare-selection', handleComparisonChange);
     };
   }, []);

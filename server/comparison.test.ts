@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   comparisonCategories,
   comparisonProcesses,
@@ -30,11 +30,13 @@ const expectedCatalog: { id: ComparisonCategoryId; label: string; names: string[
   { id: 'contracts-signature', label: 'Contratos y firma', names: ['DocuSign', 'Dropbox Sign', 'PandaDoc'] },
 ];
 
-const firstPreviewNames = [
+const firstReferenceNames = [
   'HubSpot', 'Salesforce', 'Pipedrive', 'Zoho CRM', 'Freshsales', 'monday sales CRM',
   'Trello', 'Asana', 'monday work management', 'ClickUp', 'Todoist', 'Notion',
   'Microsoft Excel', 'Google Sheets', 'Airtable', 'Mindbody',
 ];
+
+const signatureIds = ['docusign', 'dropbox-sign', 'pandadoc'];
 
 function syntheticRelation(processId: string, usage: string, overrides: Partial<VerifiedToolProcess> = {}): VerifiedToolProcess {
   return { processId, verified: true, evidence: 'Evidencia sintética de la relación', usage, ...overrides };
@@ -43,7 +45,7 @@ function syntheticRelation(processId: string, usage: string, overrides: Partial<
 function syntheticTool(
   id: string, name: string, processIds: readonly string[], verifiedProcesses?: readonly VerifiedToolProcess[],
 ): ComparisonTool {
-  return { id, name, category: 'clients-sales', label: 'Prueba', logo: null, processIds, verifiedProcesses, previewVisible: true };
+  return { id, name, category: 'clients-sales', label: 'Prueba', logo: null, processIds, verifiedProcesses, referenceVisible: true };
 }
 
 function syntheticProcess(id: string, overrides: Partial<ComparisonProcess> = {}): ComparisonProcess {
@@ -108,28 +110,138 @@ describe('catálogo de referencias de comparación', () => {
     }
   });
 
-  it('ordena las primeras 16 propuestas y oculta las cinco referencias sensibles en la vista de diseño', () => {
-    const preview = getVisibleComparisonTools(true);
-    expect(preview).toHaveLength(35);
-    expect(preview.slice(0, 16).map((tool) => tool.name)).toEqual(firstPreviewNames);
-    expect(comparisonTools.filter((tool) => !tool.previewVisible).map((tool) => tool.name)).toEqual([
-      'Calendly', 'Skedda', 'DocuSign', 'Dropbox Sign', 'PandaDoc',
+  it('muestra 37 referencias informativas, incluidas Calendly y Skedda, y conserva el orden inicial', () => {
+    const visible = getVisibleComparisonTools();
+    expect(visible).toHaveLength(37);
+    expect(visible.slice(0, 16).map((tool) => tool.name)).toEqual(firstReferenceNames);
+    expect(visible.map((tool) => tool.id)).toEqual(comparisonTools
+      .filter((tool) => !signatureIds.includes(tool.id)).map((tool) => tool.id));
+    expect(comparisonTools.filter((tool) => !tool.referenceVisible).map((tool) => tool.id)).toEqual(signatureIds);
+    expect(getSelectedComparisonTools(['calendly', 'skedda', ...signatureIds]).map((tool) => tool.name)).toEqual([
+      'Calendly', 'Skedda',
     ]);
-    expect(getSelectedComparisonTools(['calendly', 'skedda', 'docusign', 'dropbox-sign', 'pandadoc'], true)).toEqual([]);
-    expect(getSelectedComparisonTools(['notion', 'hubspot', 'notion', 'unknown', 'monday-sales-crm'], true).map((tool) => tool.name)).toEqual([
+    expect(getSelectedComparisonTools(['notion', 'hubspot', 'notion', 'unknown', 'monday-sales-crm']).map((tool) => tool.name)).toEqual([
       'HubSpot', 'monday sales CRM', 'Notion',
     ]);
-    expect(getSelectedComparisonTools([], true)).toEqual([]);
+    expect(getSelectedComparisonTools([])).toEqual([]);
   });
 
-  it('no publica herramientas ni procesos en ausencia de evidencia verificable', () => {
+  it('mantiene la misma lista de referencias en cualquier entorno', () => {
+    const expected = comparisonTools.filter((tool) => !signatureIds.includes(tool.id)).map((tool) => tool.id);
+    try {
+      for (const mode of ['development', 'production', 'test']) {
+        vi.stubEnv('NODE_ENV', mode);
+        vi.stubEnv('MODE', mode);
+        expect(getVisibleComparisonTools().map((tool) => tool.id)).toEqual(expected);
+        expect(getSelectedComparisonTools(comparisonTools.map((tool) => tool.id)).map((tool) => tool.id)).toEqual(expected);
+      }
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it('mostrar referencias sin evidencia no verifica procesos, relaciones ni aplicaciones', () => {
     expect(comparisonProcesses.every((process) => process.verified === false && process.evidence === null)).toBe(true);
     expect(comparisonTools.every((tool) => !tool.verifiedProcesses?.some((relation) => relation.verified === true))).toBe(true);
-    expect(getVisibleComparisonTools(false)).toEqual([]);
+    expect(getVisibleComparisonTools()).toHaveLength(37);
     const allIds = comparisonTools.map((tool) => tool.id);
-    expect(getSelectedComparisonTools(allIds, false)).toEqual([]);
+    expect(getSelectedComparisonTools(allIds)).toHaveLength(37);
     expect(getVerifiedGroups(allIds)).toEqual([]);
     expect(getCandidateAppIds(getVerifiedGroups(allIds))).toEqual([]);
+    expect(getVerifiedComparisonAppIds({ toolIds: allIds })).toEqual([]);
+  });
+});
+
+describe('visibilidad sintética de referencias y firma electrónica', () => {
+  const signatureProcess = () => syntheticProcess('electronic-signature', { label: 'Firma electrónica' });
+  const contractProcesses = () => [
+    syntheticProcess('contract-storage', { label: 'Almacenamiento de contratos' }),
+    syntheticProcess('contract-generation', { label: 'Generación de contratos' }),
+  ];
+  const signatureTools = () => comparisonTools.filter((tool) => signatureIds.includes(tool.id)).map((tool) => ({
+    ...tool,
+    // La excepción de seguridad también debe actuar ante un indicador erróneamente activado.
+    referenceVisible: true,
+    processIds: [...tool.processIds, 'contract-storage', 'contract-generation'],
+    verifiedProcesses: [
+      syntheticRelation('contract-storage', 'para almacenar contratos'),
+      syntheticRelation('contract-generation', 'para generar contratos'),
+    ],
+  }));
+
+  it('respeta el indicador informativo sin convertirlo en evidencia', () => {
+    const visible = syntheticTool('visible', 'Referencia visible', ['process']);
+    const hidden = { ...syntheticTool('hidden', 'Referencia oculta', ['process'], [
+      syntheticRelation('process', 'para seguimiento'),
+    ]), referenceVisible: false };
+    const tools = [visible, hidden];
+    const processes = [syntheticProcess('process')];
+    expect(getVisibleComparisonTools(tools, processes)).toEqual([visible]);
+    expect(getSelectedComparisonTools(['hidden', 'visible', 'visible'], tools, processes)).toEqual([visible]);
+    expect(getVerifiedGroups(['visible'], tools, processes)).toEqual([]);
+    expect(getVerifiedGroups(['hidden'], tools, processes)).toHaveLength(1);
+  });
+
+  it.each(signatureIds)('mantiene %s oculta sin prueba electrónica específica de su propia relación', (id) => {
+    const tools = signatureTools();
+    const contracts = contractProcesses();
+    // Hasta dos procesos de contrato verificados y vinculados no equivalen a firma.
+    expect(getVerifiedGroups([id], tools, contracts).map((group) => group.id)).toEqual([
+      'contract-storage', 'contract-generation',
+    ]);
+    expect(getVisibleComparisonTools(tools, contracts)).toEqual([]);
+    expect(getVisibleComparisonTools(tools, [...contracts, signatureProcess()])).toEqual([]);
+
+    const withOwnLink = tools.map((tool) => tool.id === id ? {
+      ...tool, verifiedProcesses: [...tool.verifiedProcesses,
+        syntheticRelation('electronic-signature', 'para solicitar firmas electrónicas')],
+    } : tool);
+    expect(getVisibleComparisonTools(withOwnLink, contracts)).toEqual([]);
+    expect(getVisibleComparisonTools(withOwnLink, [signatureProcess(), ...contracts]).map((tool) => tool.id)).toEqual([id]);
+    expect(getSelectedComparisonTools([...signatureIds, id, 'unknown'], withOwnLink, [signatureProcess()]).map((tool) => tool.id)).toEqual([id]);
+
+    for (const invalidProcess of [
+      syntheticProcess('electronic-signature', { verified: false }),
+      syntheticProcess('electronic-signature', { evidence: null }),
+      syntheticProcess('electronic-signature', { evidence: '  ' }),
+      syntheticProcess('electronic-signature', { appId: ' ' }),
+    ]) expect(getVisibleComparisonTools(withOwnLink, [invalidProcess])).toEqual([]);
+
+    for (const invalidRelation of [
+      syntheticRelation('electronic-signature', 'para solicitar firmas', { verified: false }),
+      syntheticRelation('electronic-signature', 'para solicitar firmas', { evidence: ' ' }),
+      syntheticRelation('electronic-signature', ' '),
+      syntheticRelation('contract-generation', 'para generar contratos'),
+    ]) {
+      const withoutValidLink = tools.map((tool) => tool.id === id
+        ? { ...tool, verifiedProcesses: [invalidRelation] }
+        : tool);
+      expect(getVisibleComparisonTools(withoutValidLink, [signatureProcess()])).toEqual([]);
+    }
+    const withoutProposedLink = withOwnLink.map((tool) => tool.id === id
+      ? { ...tool, processIds: ['contract-storage'] }
+      : tool);
+    expect(getVisibleComparisonTools(withoutProposedLink, [signatureProcess()])).toEqual([]);
+  });
+
+  it('permite cada firma solo cuando su proceso y su propia relación están verificados', () => {
+    const tools = signatureTools().map((tool) => ({
+      ...tool,
+      referenceVisible: false,
+      verifiedProcesses: [...tool.verifiedProcesses,
+        syntheticRelation('electronic-signature', `para gestionar firmas en ${tool.name}`)],
+    }));
+    const processes = [signatureProcess()];
+    expect(getVisibleComparisonTools(tools, processes).map((tool) => tool.id)).toEqual(signatureIds);
+    expect(getSelectedComparisonTools(['pandadoc', 'docusign'], tools, processes).map((tool) => tool.id)).toEqual([
+      'docusign', 'pandadoc',
+    ]);
+    expect(getVerifiedGroups(signatureIds, tools, processes)[0].relatedUsages).toEqual(tools.map((tool) => ({
+      toolName: tool.name, usage: `para gestionar firmas en ${tool.name}`,
+    })));
+    // Los datos de producción siguen intactos: la prueba no activa ninguna función real.
+    expect(getVisibleComparisonTools().map((tool) => tool.id).filter((id) => signatureIds.includes(id))).toEqual([]);
+    expect(getVerifiedGroups(signatureIds)).toEqual([]);
   });
 });
 
@@ -180,7 +292,7 @@ describe('mapeos sintéticos de procesos verificados', () => {
     expect(getVerifiedGroups(['unknown'], tools, processes)).toEqual([]);
   });
 
-  it('no activa herramientas reales con evidencia global de proceso pero sin evidencia del vínculo', () => {
+  it('no genera resultados de herramientas reales con evidencia global pero sin evidencia del vínculo', () => {
     const globallyVerified = comparisonProcesses.map((process) => ({
       ...process, verified: true, evidence: 'Evidencia global sintética',
     }));
@@ -246,7 +358,7 @@ describe('mapeos sintéticos de procesos verificados', () => {
     expect(getVerifiedGroups(ids, tools, [syntheticProcess('process', { evidence: ' ' })])).toEqual([]);
   });
 
-  it('la evidencia sintética de reserva de espacios de Skedda no habilita Calendly sin su propio vínculo', () => {
+  it('la evidencia sintética de Skedda no verifica el vínculo de Calendly', () => {
     const realTools = comparisonTools.filter((tool) => ['calendly', 'skedda'].includes(tool.id));
     const skeddaRelation = syntheticRelation('booking', 'para reservar espacios');
     const tools = realTools.map((tool) => tool.id === 'skedda'

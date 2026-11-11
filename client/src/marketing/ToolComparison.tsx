@@ -42,7 +42,6 @@ function ToolCard({ tool, selected, onToggle }: {
 }
 
 export function ToolComparison() {
-  const preview = __BERRIQ_DESIGN_PREVIEW__;
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [category, setCategory] = useState<ComparisonCategoryId | 'all'>('all');
   const [search, setSearch] = useState('');
@@ -54,9 +53,8 @@ export function ToolComparison() {
   const resultTitleId = `${id}-result-title`;
   const gridId = `${id}-grid`;
 
-  // En producción los datos solo incluyen herramientas con procesos verificados.
-  const visibleTools = getVisibleComparisonTools(preview);
-  const selectedTools = getSelectedComparisonTools(selectedIds, preview);
+  const visibleTools = getVisibleComparisonTools();
+  const selectedTools = getSelectedComparisonTools(selectedIds);
   const groups = getVerifiedGroups(selectedTools.map((tool) => tool.id));
   const hasSelection = selectedTools.length > 0;
   const visibleCategories = comparisonCategories.filter((item) => visibleTools.some((tool) => tool.category === item.id));
@@ -68,9 +66,9 @@ export function ToolComparison() {
   const displayedTools = expanded ? filteredTools : filteredTools.slice(0, INITIAL_TOOL_COUNT);
 
   useEffect(() => {
-    const selected = getSelectedComparisonTools(selectedIds, preview);
+    const selected = getSelectedComparisonTools(selectedIds);
     window.dispatchEvent(new CustomEvent('berriq:compare-selection', { detail: { toolIds: selected.map((tool) => tool.id) } }));
-  }, [selectedIds, preview]);
+  }, [selectedIds]);
 
   const toggleTool = (toolId: string) => {
     setSelectedIds((current) => current.includes(toolId)
@@ -84,12 +82,7 @@ export function ToolComparison() {
     setSelectedIds([]);
   };
 
-  const showApplications = (processId?: string) => {
-    if (groups.length === 0 || (processId !== undefined && !groups.some((group) => group.id === processId))) return;
-    const toolIds = selectedTools.map((tool) => tool.id);
-    const detail = processId === undefined ? { toolIds } : { toolIds, processId };
-    window.dispatchEvent(new CustomEvent('berriq:compare-apps', { detail }));
-
+  const revealApplications = () => {
     // Evitar el desplazamiento automático del hash antes de aplicar la preferencia de movimiento.
     if (window.location.hash !== '#aplicaciones') {
       window.history.pushState(window.history.state, '', '#aplicaciones');
@@ -102,26 +95,36 @@ export function ToolComparison() {
     title?.focus({ preventScroll: true });
   };
 
-  // No se publica la sección si no existen herramientas con procesos verificados.
+  const showApplications = (processId?: string) => {
+    if (groups.length === 0 || (processId !== undefined && !groups.some((group) => group.id === processId))) return;
+    const toolIds = selectedTools.map((tool) => tool.id);
+    const detail = processId === undefined ? { toolIds } : { toolIds, processId };
+    window.dispatchEvent(new CustomEvent('berriq:compare-apps', { detail }));
+    revealApplications();
+  };
+
+  const showAllApplications = () => {
+    window.dispatchEvent(new CustomEvent('berriq:compare-show-all'));
+    revealApplications();
+  };
+
   if (visibleTools.length === 0) return null;
 
   return (
     <section id="herramientas-comparacion" className="tc-section" aria-labelledby={`${id}-title`}>
       <div className="tc-container">
         <div className="tc-heading">
-          <span className="tc-eyebrow"><span aria-hidden="true" /> Comparación por procesos</span>
+          <span className="tc-eyebrow"><span aria-hidden="true" /> Referencias informativas</span>
           <h2 id={`${id}-title`}>¿Cuántas de estas herramientas utilizas?</h2>
-          <p>Clientes, tareas, reservas, cobros y equipo. Descubre qué procesos puedes reunir en berriq.</p>
+          <p>Clientes, tareas, reservas, cobros y equipo. Explora herramientas que suelen formar parte del día a día de un negocio.</p>
         </div>
 
-        {preview && (
-          <p className="tc-preview">Vista previa de diseño: las herramientas y funciones están pendientes de verificación y no se publicarán hasta validarlas</p>
-        )}
+        <p className="tc-preview">Referencias informativas: su aparición no implica equivalencia, cobertura ni integración con berriq.</p>
 
         <div className="tc-layout">
           <div className="tc-choices">
             <div className="tc-choices__heading">
-              <p id={instructionId}>Selecciona las herramientas que usas y explora las funciones relacionadas.</p>
+              <p id={instructionId}>Selecciona las herramientas que utilizas para explorar sus categorías.</p>
               <button type="button" className="tc-clear" onClick={clearSelection} disabled={!hasSelection}>Limpiar selección</button>
             </div>
 
@@ -180,12 +183,16 @@ export function ToolComparison() {
 
           <section className="tc-result" aria-labelledby={resultTitleId}>
             <span className="tc-result__eyebrow">Tu selección</span>
-            <h3 id={resultTitleId}>{hasSelection ? (groups.length > 0 ? 'Estos son los procesos que puedes explorar en berriq.' : 'Verificación pendiente para tu selección.') : 'Selecciona tus herramientas y descubre qué puedes centralizar.'}</h3>
+            <h3 id={resultTitleId}>{hasSelection ? (groups.length > 0 ? 'Estos son los procesos que puedes explorar en berriq.' : 'Tus herramientas seleccionadas') : 'Selecciona tus herramientas para explorar sus categorías.'}</h3>
             {hasSelection ? (
               <>
                 <div className="tc-selection">
                   <span className="tc-result__label">Herramientas seleccionadas</span>
-                  <p>{selectedTools.map((tool) => tool.name).join(' · ')}</p>
+                  <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+                    {selectedTools.map((tool) => (
+                      <li key={tool.id}><p>{tool.name} · {comparisonCategories.find((item) => item.id === tool.category)?.label}</p></li>
+                    ))}
+                  </ul>
                 </div>
                 {groups.length > 0 ? (
                   <div className="tc-processes">
@@ -205,14 +212,14 @@ export function ToolComparison() {
                     </ul>
                   </div>
                 ) : (
-                  <p className="tc-result__notice">Todavía no hay procesos verificados para las herramientas seleccionadas. Las funciones solo se mostrarán cuando se validen.</p>
+                  <p className="tc-result__notice">Esta selección es informativa y no describe funciones ni integraciones de berriq.</p>
                 )}
               </>
             ) : (
               <p className="tc-empty">Puedes elegir varias herramientas y cambiar tu selección cuando quieras.</p>
             )}
-            <button type="button" className="tc-primary" disabled={groups.length === 0} onClick={() => showApplications()}>
-              Ver estas funciones en berriq <ArrowRight size={17} aria-hidden="true" />
+            <button type="button" className="tc-primary" onClick={groups.length > 0 ? () => showApplications() : showAllApplications}>
+              {groups.length > 0 ? 'Ver estas funciones en berriq' : 'Ver aplicaciones de berriq'} <ArrowRight size={17} aria-hidden="true" />
             </button>
           </section>
         </div>
@@ -221,7 +228,7 @@ export function ToolComparison() {
             ? `${selectedTools.length} ${selectedTools.length === 1 ? 'herramienta seleccionada' : 'herramientas seleccionadas'}; ${groups.length} ${groups.length === 1 ? 'proceso verificado' : 'procesos verificados'}.`
             : 'Ninguna herramienta seleccionada.'}
         </p>
-        <p className="tc-footnote">Comparación por procesos, no equivalencia completa entre productos. Las marcas pertenecen a sus respectivos titulares; su aparición no implica afiliación ni integración.</p>
+        <p className="tc-footnote">Las marcas pertenecen a sus respectivos titulares; su aparición no implica afiliación ni integración.</p>
       </div>
     </section>
   );

@@ -171,7 +171,6 @@ function vitePluginPublicPlatformConfig(): Plugin {
 const plugins = [vitePluginPublicPlatformConfig(), react(), tailwindcss(), jsxLocPlugin(), vitePluginManusDebugCollector()];
 
 export default defineConfig(({ command }) => ({
-  define: { __BERRIQ_DESIGN_PREVIEW__: JSON.stringify(command === 'serve') },
   plugins,
   resolve: {
     alias: {
