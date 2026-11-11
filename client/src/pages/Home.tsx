@@ -3,6 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Pause, Play, Sparkles, X } from 'lucide-react';
 import { Header, Hero, Benefits } from '../marketing/Hero';
 import { Applications, Industries } from '../marketing/Explorers';
+import { ToolComparison } from '../marketing/ToolComparison';
 import { Experience, FAQ, Closing, Footer } from '../marketing/Experience';
 import { Plans } from '../marketing/Plans';
 import { getVerifiedBusinessProfile, type BusinessSelection } from '../marketing/businessProfiles';
@@ -86,6 +87,7 @@ export default function Home() {
     <main id="contenido">
       <Hero onAction={onAction} />
       <Benefits />
+      <ToolComparison />
       <Applications onAction={onAction} />
       <Industries onAction={onAction} selection={selection} onSelect={setSelection} onClear={() => setSelection(null)} onExample={showBusinessExample} />
       <Experience onAction={onAction} selection={selection} exampleRequest={exampleRequest} onChangeBusiness={changeBusiness} />

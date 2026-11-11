@@ -67,32 +67,61 @@ function SearchBox({ value, onChange, placeholder, label, id, inputRef }: {
 export function Applications({ onAction }: ExplorerProps) {
   const [category, setCategory] = useState<AppCategoryId | 'all'>('all');
   const [search, setSearch] = useState('');
+  const [relatedIds, setRelatedIds] = useState<Set<string> | null>(null);
   const [selected, setSelected] = useState<CatalogApp | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const searchRef = useRef<HTMLInputElement | null>(null);
   const actionStartedRef = useRef(false);
   const searchId = useId();
 
   useEffect(() => {
     const handleExplore = (event: Event) => {
+      setRelatedIds(null);
       const query = (event as CustomEvent<{ query?: unknown }>).detail?.query;
       if (typeof query !== 'string') return;
       const app = visibleApplications.find((item) => normalize(item.name) === normalize(query));
       setCategory('all');
       setSearch(app?.name ?? query);
     };
+    const handleCompare = (event: Event) => {
+      const appIds = (event as CustomEvent<{ appIds?: unknown }>).detail?.appIds;
+      if (!Array.isArray(appIds) || !appIds.every((id) => typeof id === 'string')) return;
+      setCategory('all');
+      setSearch('');
+      setRelatedIds(new Set(appIds));
+    };
+    const handleComparisonChange = (event: Event) => {
+      const appIds = (event as CustomEvent<{ appIds?: unknown }>).detail?.appIds;
+      if (!Array.isArray(appIds) || !appIds.every((id) => typeof id === 'string')) return;
+      setRelatedIds((current) => current === null || appIds.length === 0 ? null : new Set(appIds));
+    };
     window.addEventListener('berriq:explore-app', handleExplore);
-    return () => window.removeEventListener('berriq:explore-app', handleExplore);
+    window.addEventListener('berriq:compare-apps', handleCompare);
+    window.addEventListener('berriq:compare-selection', handleComparisonChange);
+    return () => {
+      window.removeEventListener('berriq:explore-app', handleExplore);
+      window.removeEventListener('berriq:compare-apps', handleCompare);
+      window.removeEventListener('berriq:compare-selection', handleComparisonChange);
+    };
   }, []);
 
   const filtered = useMemo(() => {
     const query = normalize(search);
     return visibleApplications.filter((app) => {
       const categoryName = appCategories.find((item) => item.id === app.category)?.label ?? '';
+      const matchesRelated = relatedIds === null || relatedIds.has(app.id);
       const matchesCategory = category === 'all' || app.category === category;
       const searchable = [app.name, app.summary, categoryName, ...(app.keywords ?? [])].join(' ');
-      return matchesCategory && (!query || normalize(searchable).includes(query));
+      return matchesRelated && matchesCategory && (!query || normalize(searchable).includes(query));
     });
-  }, [category, search]);
+  }, [category, search, relatedIds]);
+
+  const showAllApplications = () => {
+    setRelatedIds(null);
+    setSearch('');
+    setCategory('all');
+    focusAndReveal(searchRef.current);
+  };
 
   const openApp = (app: CatalogApp, button: HTMLButtonElement) => {
     actionStartedRef.current = false;
@@ -115,15 +144,24 @@ export function Applications({ onAction }: ExplorerProps) {
 
         <div className="exp-app-controls">
           <div className="exp-filter-list" role="group" aria-label="Filtrar aplicaciones por categoría">
-            <button className={`exp-filter${category === 'all' ? ' exp-is-active' : ''}`} type="button" aria-pressed={category === 'all'} onClick={() => setCategory('all')}>Todas</button>
+            <button className={`exp-filter${category === 'all' ? ' exp-is-active' : ''}`} type="button" aria-pressed={category === 'all'} onClick={() => { setRelatedIds(null); setCategory('all'); }}>Todas</button>
             {visibleCategories.map((item) => (
-              <button key={item.id} className={`exp-filter${category === item.id ? ' exp-is-active' : ''}`} type="button" aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.label}</button>
+              <button key={item.id} className={`exp-filter${category === item.id ? ' exp-is-active' : ''}`} type="button" aria-pressed={category === item.id} onClick={() => { setRelatedIds(null); setCategory(item.id); }}>{item.label}</button>
             ))}
           </div>
-          <SearchBox id={searchId} label="Buscar aplicaciones" value={search} onChange={setSearch} placeholder="Buscar una aplicación..." />
+          <SearchBox id={searchId} inputRef={searchRef} label="Buscar aplicaciones" value={search} onChange={(value) => { setRelatedIds(null); setSearch(value); }} placeholder="Buscar una aplicación..." />
         </div>
 
-        <div className="exp-result-line" aria-live="polite">{filtered.length} {filtered.length === 1 ? 'aplicación' : 'aplicaciones'} para explorar</div>
+        {relatedIds !== null && (
+          <div className="exp-related">
+            <div>
+              <h3>Áreas relacionadas para revisar</h3>
+              <p>Su disponibilidad en berriq no está verificada.</p>
+            </div>
+            <button className="exp-related__button" type="button" onClick={showAllApplications}>Ver todas las aplicaciones</button>
+          </div>
+        )}
+        <div className="exp-result-line" aria-live="polite"><span className="exp-sr-only">{relatedIds !== null ? 'Áreas relacionadas para revisar. Su disponibilidad en berriq no está verificada. ' : ''}</span>{filtered.length} {filtered.length === 1 ? 'aplicación' : 'aplicaciones'} para explorar</div>
         {filtered.length > 0 ? (
           <div className="exp-app-grid">
             {filtered.map((app) => (
@@ -137,7 +175,7 @@ export function Applications({ onAction }: ExplorerProps) {
             ))}
           </div>
         ) : (
-          <div className="exp-empty"><strong>No encontramos aplicaciones con esa búsqueda.</strong><span>Prueba otro término o selecciona otra categoría.</span><button type="button" onClick={() => { setSearch(''); setCategory('all'); }}>Ver todas las aplicaciones</button></div>
+          <div className="exp-empty">{relatedIds !== null ? <><strong>No encontramos aplicaciones relacionadas en el catálogo.</strong><span>Revisa todas las aplicaciones para explorar otras áreas.</span></> : <><strong>No encontramos aplicaciones con esa búsqueda.</strong><span>Prueba otro término o selecciona otra categoría.</span><button type="button" onClick={showAllApplications}>Ver todas las aplicaciones</button></>}</div>
         )}
         <p className="exp-footnote">La disponibilidad de módulos, conexiones y planes se confirmará según el alcance de tu operación.</p>
       </div>
@@ -148,7 +186,7 @@ export function Applications({ onAction }: ExplorerProps) {
             <Dialog.Overlay className="exp-dialog-overlay" />
             <Dialog.Content className="exp-dialog" onCloseAutoFocus={(event) => {
               event.preventDefault();
-              if (!actionStartedRef.current) triggerRef.current?.focus();
+              if (!actionStartedRef.current) (triggerRef.current?.isConnected ? triggerRef.current : searchRef.current)?.focus();
             }}>
               <Dialog.Close className="exp-close" aria-label="Cerrar ficha"><X size={20} /></Dialog.Close>
               <div className="exp-dialog__top">

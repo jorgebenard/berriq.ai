@@ -26,6 +26,11 @@
 .exp-search svg { flex: none; }
 .exp-search input { display: block; width: 100%; min-width: 0; padding: 11px 0; border: 0; outline: 0; color: #171428; background: transparent; font: inherit; font-size: 13px; }
 .exp-search input::placeholder { color: #777182; opacity: 1; }
+.exp-related { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: 22px; padding: 15px 18px; border: 1px solid #ded4f6; border-radius: 14px; background: #f8f5ff; }
+.exp-related h3 { margin: 0; color: #2a2140; font-size: 15px; line-height: 1.4; }
+.exp-related p { margin: 4px 0 0; color: #514b5f; font-size: 13px; line-height: 1.5; }
+.exp-related__button { min-height: 44px; padding: 8px 12px; border: 1px solid #bba9e4; border-radius: 10px; color: #4a258f; background: #fff; font-size: 13px; font-weight: 750; line-height: 1.4; }
+.exp-related__button:hover { border-color: #6d3df5; background: #f8f5ff; }
 .exp-result-line { margin: 22px 0 12px; color: #6c6777; font-size: 12px; font-weight: 600; }
 .exp-app-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .exp-app-card { display: flex; min-width: 0; min-height: 211px; flex-direction: column; align-items: flex-start; position: relative; text-align: left; padding: 22px 19px 18px; border: 1px solid #eae8f0; border-radius: 18px; background: #fff; box-shadow: 0 5px 18px rgba(38, 27, 66, .035); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
@@ -197,7 +202,7 @@
 body[data-motion='paused'] .exp-section *, body[data-motion='paused'] .exp-dialog *, body[data-motion='paused'] .exp-popover * { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
 body[data-motion='paused'] .exp-app-card:hover, body[data-motion='paused'] .exp-app-card:focus-visible, body[data-motion='paused'] .exp-industry-card:hover, body[data-motion='paused'] .exp-industry-card.exp-is-open { transform: none; }
 @media (forced-colors: active) {
-  .exp-business-panel, .exp-industry-card--selected, .exp-businesses__button, .exp-businesses__button--selected, .exp-business-panel__close, .exp-business-panel__change, .exp-business-panel__example-button { border: 1px solid ButtonText; }
+  .exp-related, .exp-related__button, .exp-business-panel, .exp-industry-card--selected, .exp-businesses__button, .exp-businesses__button--selected, .exp-business-panel__close, .exp-business-panel__change, .exp-business-panel__example-button { border: 1px solid ButtonText; }
   .exp-businesses__button--selected, .exp-industry-card--selected { outline: 2px solid Highlight; outline-offset: -3px; }
   .exp-business-panel:focus, .exp-section button:focus-visible, .exp-popover button:focus-visible { outline-color: Highlight; }
 }
