@@ -4,6 +4,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { ArrowRight, Check, ChevronDown, Search, X, type LucideIcon } from 'lucide-react';
 import { siteConfig, trackEvent } from './siteConfig';
 import { getVerifiedBusinessProfile, industryConversation, type BusinessSelection } from './businessProfiles';
+import { getVerifiedComparisonAppIds } from './comparisonData';
 import {
   appCategories,
   applications,
@@ -84,15 +85,15 @@ export function Applications({ onAction }: ExplorerProps) {
       setSearch(app?.name ?? query);
     };
     const handleCompare = (event: Event) => {
-      const appIds = (event as CustomEvent<{ appIds?: unknown }>).detail?.appIds;
-      if (!Array.isArray(appIds) || !appIds.every((id) => typeof id === 'string')) return;
+      const appIds = getVerifiedComparisonAppIds((event as CustomEvent<unknown>).detail);
+      if (!appIds || appIds.length === 0) return;
       setCategory('all');
       setSearch('');
       setRelatedIds(new Set(appIds));
     };
     const handleComparisonChange = (event: Event) => {
-      const appIds = (event as CustomEvent<{ appIds?: unknown }>).detail?.appIds;
-      if (!Array.isArray(appIds) || !appIds.every((id) => typeof id === 'string')) return;
+      const appIds = getVerifiedComparisonAppIds((event as CustomEvent<unknown>).detail);
+      if (appIds === null) return;
       setRelatedIds((current) => current === null || appIds.length === 0 ? null : new Set(appIds));
     };
     window.addEventListener('berriq:explore-app', handleExplore);

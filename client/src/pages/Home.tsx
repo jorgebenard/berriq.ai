@@ -87,11 +87,11 @@ export default function Home() {
     <main id="contenido">
       <Hero onAction={onAction} />
       <Benefits />
-      <ToolComparison />
       <Applications onAction={onAction} />
       <Industries onAction={onAction} selection={selection} onSelect={setSelection} onClear={() => setSelection(null)} onExample={showBusinessExample} />
       <Experience onAction={onAction} selection={selection} exampleRequest={exampleRequest} onChangeBusiness={changeBusiness} />
       <Plans onAction={onAction} />
+      <ToolComparison />
       <FAQ onAction={onAction} />
       <Closing onAction={onAction} />
     </main>
