@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import * as Tabs from "@radix-ui/react-tabs";
 import {
@@ -24,11 +24,17 @@ import {
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
+import { getVerifiedBusinessProfile, type BusinessSelection } from "./businessProfiles";
 import { siteConfig } from "./siteConfig";
 import "./experience.css";
 
 type ActionKind = "trial" | "login" | "contact";
 type ActionProps = { onAction?: (kind: ActionKind) => void };
+type ExperienceProps = ActionProps & {
+  selection?: BusinessSelection | null;
+  onChangeBusiness?: () => void;
+  exampleRequest?: number;
+};
 
 type DemoStep = {
   label: string;
@@ -211,26 +217,59 @@ const journeys: Journey[] = [
   },
 ];
 
-export function Experience(_props: ActionProps = {}) {
-  const [journeyId, setJourneyId] = useState(journeys[0].id);
+export function Experience({ selection = null, onChangeBusiness, exampleRequest = 0 }: ExperienceProps = {}) {
+  const profile = getVerifiedBusinessProfile(selection);
+  const profileJourneyId = profile?.journeyId;
+  const [journeyId, setJourneyId] = useState(profileJourneyId ?? journeys[0].id);
   const [stepIndex, setStepIndex] = useState("0");
+  const industryId = selection?.industryId;
+  const businessName = selection?.businessName;
+
+  useEffect(() => {
+    if (profileJourneyId) setJourneyId(profileJourneyId);
+    setStepIndex("0");
+  }, [industryId, businessName, exampleRequest, profileJourneyId]);
+
+  const displayedJourneys = journeys.map((journey) => {
+    if (!profile || profile.journeyId !== journey.id) return journey;
+    return {
+      ...journey,
+      steps: profile.steps.map((step, index) => ({
+        ...step,
+        icon: journey.steps[index]?.icon ?? journey.icon,
+      })),
+    };
+  });
 
   return (
     <section className="xp-experience section" id="como-funciona" aria-labelledby="xp-experience-title">
       <div className="container">
         <div className="xp-section-heading xp-section-heading-center">
           <span className="eyebrow xp-eyebrow">UNA OPERACIÓN CONECTADA</span>
-          <h2 className="section-title" id="xp-experience-title">Así se conecta tu día a día.</h2>
+          <h2 className="section-title" id="xp-experience-title" tabIndex={-1}>Así se conecta tu día a día.</h2>
           <p>Descubre cómo las distintas áreas de tu negocio pueden formar parte de una misma historia.</p>
         </div>
 
+        {selection && (
+          <div className="xp-business-context">
+            <div className="xp-business-context-copy" role="status" aria-live="polite">
+              <strong>{profile ? `Ejemplo para: ${selection.businessName}` : `Ejemplo para ${selection.businessName} pendiente de validación`}</strong>
+              <p>{profile
+                ? `El recorrido de ${journeys.find((journey) => journey.id === profile.journeyId)?.label ?? "este negocio"} está adaptado; los demás son ejemplos generales.`
+                : "Mientras tanto, explora los cuatro ejemplos generales. No están personalizados para este negocio."}</p>
+            </div>
+            {onChangeBusiness && <button type="button" className="xp-business-change" onClick={onChangeBusiness}>Cambiar negocio</button>}
+          </div>
+        )}
+
         <Tabs.Root
+          id="xp-journeys"
           value={journeyId}
           onValueChange={(value) => { setJourneyId(value); setStepIndex("0"); }}
           className="xp-journeys"
         >
-          <Tabs.List className="xp-journey-list" aria-label="Elige un recorrido">
-            {journeys.map((journey) => {
+          <Tabs.List id="xp-journeys-tabs" className="xp-journey-list" aria-label="Elige un recorrido">
+            {displayedJourneys.map((journey) => {
               const Icon = journey.icon;
               return (
                 <Tabs.Trigger key={journey.id} value={journey.id} className="xp-journey-trigger">
@@ -242,18 +281,19 @@ export function Experience(_props: ActionProps = {}) {
             })}
           </Tabs.List>
 
-          {journeys.map((journey) => (
+          {displayedJourneys.map((journey) => (
             <Tabs.Content key={journey.id} value={journey.id} className="xp-journey-content">
               <Tabs.Root value={stepIndex} onValueChange={setStepIndex} orientation="vertical" className="xp-experience-layout">
                 <div className="xp-steps-column">
                   <div className="xp-steps-heading">
                     <span className="xp-mini-label">EXPLORA EL RECORRIDO</span>
-                    <h3>{journey.label}</h3>
+                    <h3>{profile?.journeyId === journey.id ? profile.headline : journey.label}</h3>
+                    {selection && <p className="xp-journey-kind">{profile?.journeyId === journey.id ? "Ejemplo adaptado para este negocio." : "Ejemplo general, no personalizado para este negocio."}</p>}
                     <p>Selecciona cada paso para ver cómo se conecta con el siguiente.</p>
                   </div>
                   <Tabs.List className="xp-step-list" aria-label={`Pasos del recorrido de ${journey.label.toLowerCase()}`}>
                     {journey.steps.map((step, index) => (
-                      <Tabs.Trigger key={step.label} value={String(index)} className="xp-step-trigger">
+                      <Tabs.Trigger key={index} value={String(index)} className="xp-step-trigger">
                         <span className="xp-step-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
                         <span>{step.label}</span>
                         <ArrowRight size={16} className="xp-step-arrow" aria-hidden="true" />
@@ -266,8 +306,8 @@ export function Experience(_props: ActionProps = {}) {
                   {journey.steps.map((step, index) => {
                     const Icon = step.icon;
                     return (
-                      <Tabs.Content key={step.label} value={String(index)} className="xp-demo-content">
-                        <div className="xp-demo-topline"><span>VISTA ILUSTRATIVA</span><span>0{index + 1} / 04</span></div>
+                      <Tabs.Content key={index} value={String(index)} className="xp-demo-content">
+                        <div className="xp-demo-topline"><span>VISTA ILUSTRATIVA</span><span>{String(index + 1).padStart(2, "0")} / {String(journey.steps.length).padStart(2, "0")}</span></div>
                         <div className="xp-demo-intro">
                           <span className="xp-demo-icon"><Icon size={25} strokeWidth={1.8} aria-hidden="true" /></span>
                           <div><span className="xp-demo-kicker">{step.label}</span><h4>{step.title}</h4></div>
@@ -327,7 +367,7 @@ export function Automation(_props: ActionProps = {}) {
 }
 
 const faqs = [
-  ["¿Qué es berriq?", "berriq es una plataforma modular de gestión empresarial que reúne áreas como clientes, ventas, reservas, membresías, inventario, equipo y seguimiento de cobros."],
+  ["¿Qué es berriq?", "berriq es una propuesta de plataforma modular de gestión empresarial, con áreas como clientes, ventas, reservas, membresías, inventario, equipo y seguimiento de cobros. La disponibilidad de cada herramienta está pendiente de verificación."],
   ["¿Para qué tipos de negocio sirve?", "La plataforma puede explorarse para distintos tipos de operación, desde servicios y comercio hasta organizaciones con varias sedes. El alcance para necesidades especializadas debe verificarse para cada caso."],
   ["¿Necesito activar todas las aplicaciones?", "berriq tiene un enfoque modular para adaptar las herramientas a cada operación. La disponibilidad y las condiciones de activación de cada aplicación están pendientes de confirmación."],
   ["¿Qué incluye la prueba?", "La duración, las condiciones y el alcance de la prueba están pendientes de confirmación. El registro se conectará cuando esté disponible el proceso real."],

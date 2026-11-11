@@ -21,3 +21,7 @@ Tomar como base la referencia aprobada: fondos claros, tinta profunda, violeta p
 ## Límites de contenido
 
 Los procesos, métricas y nombres del panel son ejemplos, no capturas ni transacciones reales. La IA y las automatizaciones no se presentan como capacidades confirmadas. La duración y condiciones de la prueba no se publican como oferta activa; no se crean testimonios, certificaciones ni políticas. No se asignan módulos a planes ni funciones avanzadas sin la matriz comercial validada. La medición se prepara sin enviar eventos hasta conocer la configuración de privacidad aprobada.
+
+## Revisión de personalización por negocio
+
+Se parte de una copia Git aislada, verificada contra el árbol de la versión publicada. Se conservan la identidad y los componentes actuales. El estado de negocio seleccionado se compartirá entre la cuadrícula de sectores y los recorridos; cada botón de negocio abrirá una ficha integrada accesible debajo de la cuadrícula. Los perfiles editoriales y recorridos específicos dispondrán de una puerta explícita de verificación y no se presentarán como capacidades comprobadas sin una fuente. Hasta recibir evidencia, el panel muestra el negocio y ofrece contexto de conversación, sin afirmar tareas verificadas ni simular un contacto. Los destinos comerciales sin conexión permanecen honestamente pendientes, y se oculta el bloque de IA sin capacidades verificadas. No se publicará esta revisión hasta que Jorge la revise.

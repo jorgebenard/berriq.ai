@@ -117,8 +117,18 @@ export function Header({ onAction }: ActionProps) {
   useEffect(() => {
     const breakpoint = window.matchMedia("(max-width: 1120px)");
     const resetNavigation = () => {
+      const active = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      const focusWillBeHidden = breakpoint.matches
+        ? active?.closest('.nav-desktop, .nav-actions')
+        : active?.closest('.nav-mobile, .nav-mobile-toggle');
       setActiveMenu(null);
       setMobileOpen(false);
+      if (focusWillBeHidden) {
+        window.requestAnimationFrame(() => {
+          const target = breakpoint.matches ? mobileToggleRef.current : headerRef.current?.querySelector<HTMLElement>('.nav-brand');
+          target?.focus();
+        });
+      }
     };
     breakpoint.addEventListener("change", resetNavigation);
     return () => breakpoint.removeEventListener("change", resetNavigation);
@@ -180,7 +190,7 @@ export function Header({ onAction }: ActionProps) {
             <div className="container"><MenuContents kind="applications" onNavigate={closeNavigation} /></div>
           </div>
           <button ref={desktopIndustryRef} className={`nav-link nav-dropdown-trigger${activeMenu === "industries" ? " nav-is-active" : ""}`} type="button" aria-expanded={activeMenu === "industries"} aria-controls={desktopIndustryPanelId} onClick={() => toggleMenu("industries")}>
-            Industrias <ChevronDown size={15} aria-hidden="true" />
+            Para tu negocio <ChevronDown size={15} aria-hidden="true" />
           </button>
           <div id={desktopIndustryPanelId} className="nav-mega" hidden={activeMenu !== "industries" || mobileOpen}>
             <div className="container"><MenuContents kind="industries" onNavigate={closeNavigation} /></div>
@@ -207,7 +217,7 @@ export function Header({ onAction }: ActionProps) {
             <MenuContents kind="applications" onNavigate={closeNavigation} />
           </div>
           <button ref={mobileIndustryRef} className="nav-mobile-row" type="button" aria-expanded={activeMenu === "industries"} aria-controls={mobileIndustryPanelId} onClick={() => toggleMenu("industries")}>
-            Industrias <ChevronDown className={activeMenu === "industries" ? "nav-chevron-open" : ""} size={18} aria-hidden="true" />
+            Para tu negocio <ChevronDown className={activeMenu === "industries" ? "nav-chevron-open" : ""} size={18} aria-hidden="true" />
           </button>
           <div className="nav-mobile-submenu" id={mobileIndustryPanelId} hidden={activeMenu !== "industries"}>
             <MenuContents kind="industries" onNavigate={closeNavigation} />
@@ -279,10 +289,10 @@ export function Hero({ onAction }: ActionProps) {
         <div className="hero-copy">
           <div className="eyebrow hero-eyebrow"><span className="hero-eyebrow-dot" /> Software de gestión empresarial</div>
           <h1>Clientes, ventas y operación. <span>Todo conectado.</span></h1>
-          <p className="hero-description">berriq reúne CRM, reservas, membresías, inventario, equipo y seguimiento de cobros en una plataforma modular. Organiza tu negocio y consulta su información sin saltar entre herramientas.</p>
+          <p className="hero-description">berriq presenta una propuesta de plataforma modular para explorar la organización de clientes, ventas, reservas, membresías, inventario y equipo. La disponibilidad de cada herramienta está pendiente de verificación.</p>
           <div className="hero-actions">
             <button className="btn btn-primary hero-primary" type="button" onClick={() => onAction("trial")}>Prueba berriq gratis <ArrowRight size={18} aria-hidden="true" /></button>
-            <a className="btn btn-secondary hero-secondary" href="#aplicaciones">Explorar aplicaciones <ArrowRight size={18} aria-hidden="true" /></a>
+            <a className="btn btn-secondary hero-secondary" href="#industrias">Encuentra tu negocio <ArrowRight size={18} aria-hidden="true" /></a>
           </div>
           <p className="hero-support"><span className="hero-support-icon"><Clock3 size={13} aria-hidden="true" /></span> Registro pendiente de conexión</p>
         </div>

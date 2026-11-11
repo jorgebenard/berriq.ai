@@ -6,7 +6,8 @@
 html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{margin:0;min-width:320px}
 html:has(body[data-motion="paused"]){scroll-behavior:auto}
-body[data-motion="paused"] *,body[data-motion="paused"] *::before,body[data-motion="paused"] *::after{animation-play-state:paused!important;scroll-behavior:auto!important}
+body[data-motion="paused"] *,body[data-motion="paused"] *::before,body[data-motion="paused"] *::after{animation-play-state:paused!important;transition-duration:0s!important;scroll-behavior:auto!important}
+body[data-motion="paused"] .xp-journey-trigger:hover .xp-journey-arrow{transform:none}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 button:disabled{cursor:not-allowed}

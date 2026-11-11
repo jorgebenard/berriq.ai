@@ -49,6 +49,34 @@
   line-height: 1.75;
 }
 
+.xp-business-context {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 18px;
+  padding: 16px 18px;
+  border: 1px solid #ded7f3;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.xp-business-context-copy { min-width: 0; overflow-wrap: anywhere; }
+.xp-business-context-copy strong { color: #382376; font-size: 14px; line-height: 1.4; }
+.xp-business-context-copy p { margin: 4px 0 0; color: #625d70; font-size: 12px; line-height: 1.5; }
+.xp-business-change {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #cbbdf2;
+  border-radius: 9px;
+  background: #f8f6ff;
+  color: #4d2db0;
+  font-size: 12px;
+  font-weight: 750;
+}
+.xp-business-change:hover { border-color: #9878fb; background: #f1edff; }
+
 .xp-journey-list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -172,6 +200,13 @@
   line-height: 1.6;
 }
 
+.xp-steps-heading .xp-journey-kind {
+  margin: 0 0 8px;
+  color: #4d2db0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .xp-step-list {
   display: grid;
   gap: 5px;
@@ -197,6 +232,7 @@
 
 .xp-step-trigger:hover { background: #f8f6ff; color: #3c277d; }
 .xp-step-trigger[data-state="active"] { border-color: #e5ddff; background: #f1edff; color: #4d2db0; }
+.xp-step-trigger > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
 
 .xp-step-number {
   display: grid;
@@ -248,6 +284,7 @@
   box-shadow: 0 7px 15px rgba(80, 55, 157, .08);
 }
 .xp-demo-kicker { color: #6b48cf; font-size: 11px; font-weight: 750; }
+.xp-demo-intro > div { min-width: 0; overflow-wrap: anywhere; }
 .xp-demo-intro h4 { margin: 4px 0 0; color: #211a35; font-size: 20px; font-weight: 750; letter-spacing: -.03em; line-height: 1.2; }
 .xp-demo-description { max-width: 500px; margin: 16px 0 20px; color: #5e586d; font-size: 13px; line-height: 1.65; }
 
@@ -425,6 +462,7 @@
 }
 
 @media (max-width: 430px) {
+  .xp-business-context { align-items: flex-start; flex-direction: column; }
   .xp-journey-trigger { gap: 8px; }
   .xp-journey-label strong { font-size: 12px; }
   .xp-journey-label small { font-size: 9px; }
