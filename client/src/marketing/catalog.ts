@@ -9,6 +9,7 @@ import {
   ContactRound,
   CreditCard,
   Dumbbell,
+  FileSignature,
   GraduationCap,
   HeartPulse,
   Hotel,
@@ -52,6 +53,7 @@ export interface CatalogApp {
   connections: string[];
   example: string;
   keywords?: string[];
+  verificationNotice?: string;
 }
 
 export interface Industry {
@@ -217,6 +219,16 @@ export const applications: CatalogApp[] = [
     connections: ['Ventas y clientes', 'Inventario', 'Sedes'],
     example: 'Una persona responsable revisa la información de varias áreas del negocio.',
     keywords: ['indicadores', 'dirección', 'análisis'],
+  },
+  {
+    id: 'electronic-signature', name: 'Firma electrónica', category: 'operations', icon: FileSignature, color: 'violet',
+    summary: 'Firma de contratos y documentos en formato digital.',
+    manages: 'Documentos y solicitudes de firma, como contratos y acuerdos.',
+    helps: 'Ordenar el proceso de firma y el seguimiento de los documentos.',
+    connections: ['CRM y oportunidades', 'Cotizaciones', 'Administración y accesos'],
+    example: 'Una empresa podría preparar un contrato para firma y consultar su estado.',
+    keywords: ['firma digital', 'e-firma', 'contratos', 'acuerdos', 'documentos', 'sign'],
+    verificationNotice: 'Funcionalidad propuesta. Disponibilidad, proveedor, tipos de firma, identificación de firmantes, seguridad, validez legal, conservación y costos pendientes de confirmar. Esta página no recibe ni firma documentos.',
   },
   {
     id: 'admin', name: 'Administración y accesos', category: 'operations', icon: Settings2, color: 'lime',

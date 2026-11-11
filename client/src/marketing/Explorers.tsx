@@ -127,9 +127,10 @@ export function Applications({ onAction }: ExplorerProps) {
         {filtered.length > 0 ? (
           <div className="exp-app-grid">
             {filtered.map((app) => (
-              <button className="exp-app-card" key={app.id} type="button" onClick={(event) => openApp(app, event.currentTarget)} aria-label={`Conocer ${app.name}`}>
+              <button className="exp-app-card" key={app.id} type="button" onClick={(event) => openApp(app, event.currentTarget)} aria-label={`Conocer ${app.name}${app.verificationNotice ? ', disponibilidad por confirmar' : ''}`}>
                 <IconTile icon={app.icon} color={app.color} />
                 <span className="exp-app-card__title">{app.name}</span>
+                {app.verificationNotice && <span className="exp-app-card__status">Por confirmar</span>}
                 <span className="exp-app-card__summary">Posible uso: {app.summary}</span>
                 <span className="exp-app-card__more">Ver aplicación <ArrowRight size={14} aria-hidden="true" /></span>
               </button>
@@ -159,7 +160,7 @@ export function Applications({ onAction }: ExplorerProps) {
                 <div><h3>Posible utilidad</h3><p>{selected.helps}</p></div>
                 <div><h3>Áreas relacionadas por verificar</h3><div className="exp-tags">{selected.connections.map((connection) => <span key={connection}>{connection}</span>)}</div></div>
                 <div className="exp-example"><span>Ejemplo ilustrativo</span><p>{selected.example}</p></div>
-                <p className="exp-dialog__notice">Ejemplo conceptual. La disponibilidad, el alcance y las conexiones están pendientes de verificación.</p>
+                <p className="exp-dialog__notice">{selected.verificationNotice ?? 'Ejemplo conceptual. La disponibilidad, el alcance y las conexiones están pendientes de verificación.'}</p>
               </div>
               <div className="exp-dialog__footer"><p>Solicita más información sobre el alcance.</p><button className="btn btn-primary exp-primary" type="button" onClick={() => { actionStartedRef.current = true; setSelected(null); onAction('contact', triggerRef.current); }}>Solicitar una demo <ArrowRight size={16} aria-hidden="true" /></button></div>
             </Dialog.Content>

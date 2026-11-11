@@ -32,6 +32,7 @@
 .exp-app-card:hover, .exp-app-card:focus-visible { transform: translateY(-4px); border-color: #d9cdfb; box-shadow: 0 13px 25px rgba(58, 36, 118, .1); }
 .exp-app-card__title { display: block; margin-top: 19px; color: #201b32; font-size: 14px; line-height: 1.28; font-weight: 750; }
 .exp-app-card__summary { display: block; margin-top: 6px; color: #777182; font-size: 12px; line-height: 1.5; }
+.exp-app-card__status { display: inline-block; margin-top: 7px; padding: 4px 7px; border-radius: 7px; color: #5a3d98; background: #f0ebff; font-size: 10px; font-weight: 750; line-height: 1.2; }
 .exp-app-card__more { display: inline-flex; align-items: center; gap: 5px; margin-top: auto; padding-top: 13px; color: #6642cf; font-size: 11px; font-weight: 750; }
 .exp-app-card:hover .exp-app-card__more svg { transform: translateX(3px); }
 .exp-app-card__more svg { transition: transform .2s ease; }
