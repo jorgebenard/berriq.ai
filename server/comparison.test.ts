@@ -85,7 +85,7 @@ describe('catálogo de referencias de comparación', () => {
     expect(work.processIds).toEqual(['task-coordination']);
   });
 
-  it('utiliza recursos oficiales con sus bytes intactos', () => {
+  it('conecta un recurso local y documentado a cada herramienta sin alterar los originales', () => {
     const expectedLogos: Record<string, string> = {
       'Zoho CRM': '/brand/tools/zoho-crm.png',
       'Trello': '/brand/tools/trello-icon.svg',
@@ -94,7 +94,30 @@ describe('catálogo de referencias de comparación', () => {
       'monday sales CRM': '/brand/tools/monday.png',
       'monday work management': '/brand/tools/monday.png',
     };
-    for (const tool of comparisonTools) expect(tool.logo).toBe(expectedLogos[tool.name] ?? null);
+    const manifest = JSON.parse(readFileSync(resolve(process.cwd(), 'client/public/brand/tools/logo-manifest.json'), 'utf8')) as {
+      id: string; path: string; kind: 'official' | 'reference' | 'illustration'; source: string; note: string;
+    }[];
+    expect(manifest).toHaveLength(40);
+    expect(new Set(manifest.map((entry) => entry.id)).size).toBe(40);
+    for (const tool of comparisonTools) {
+      const entry = manifest.find((item) => item.id === tool.id);
+      expect(entry).toBeDefined();
+      expect(tool.logo).toBe(entry!.path);
+      expect(tool.logoKind).toBe(entry!.kind);
+      expect(entry!.source.trim()).not.toBe('');
+      expect(entry!.note.trim()).not.toBe('');
+      expect(entry!.path).toMatch(/^\/brand\/tools\/[a-z0-9-]+\.(png|webp|svg)$/);
+      const bytes = readFileSync(resolve(process.cwd(), `client/public${entry!.path}`));
+      expect(bytes.length).toBeGreaterThan(0);
+      if (entry!.path.endsWith('.svg')) {
+        const svg = bytes.toString('utf8');
+        expect(svg).toMatch(/<svg[\s>]/i);
+        expect(svg).not.toMatch(/<script\b|<!DOCTYPE|\bon\w+\s*=|(?:href|src)\s*=\s*['"](?:https?:|\/\/)|url\(\s*['"]?(?:https?:|\/\/)/i);
+      }
+    }
+    for (const [name, path] of Object.entries(expectedLogos)) {
+      expect(comparisonTools.find((tool) => tool.name === name)?.logo).toBe(path);
+    }
 
     const sha256: Record<string, string> = {
       'zoho-crm.png': '1d5aebed95e3a862258a58093d0204f506f8a0f6b8c92cdce7c7b45550ac1cc4',

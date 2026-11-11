@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" role="img" aria-label="Referencia ilustrada no oficial: Mindbody">
+  <title>Referencia ilustrada no oficial: Mindbody</title>
+  <rect x="3" y="3" width="34" height="34" rx="9" fill="#BF502F"/>
+  <g fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M0 14V0L5 7L10 0V14" transform="translate(8 13)"/><path d="M1 0V14H6C11 14 11.5 7 6 7H1 M1 0H6C11 0 11 7 6 7" transform="translate(22 13)"/></g>
+</svg>

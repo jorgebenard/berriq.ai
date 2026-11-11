@@ -15,28 +15,58 @@ const INITIAL_TOOL_COUNT = 16;
 const normalize = (value: string) =>
   value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase().trim();
 
+// Las imágenes son recursos locales: no cargar URLs de terceros ni rutas de red.
+const localLogo = (logo: string | null) => {
+  if (!logo?.startsWith('/')) return null;
+  try {
+    const url = new URL(logo, 'https://local.invalid/');
+    return url.origin === 'https://local.invalid' ? `${url.pathname}${url.search}${url.hash}` : null;
+  } catch {
+    return null;
+  }
+};
+
+const getInitials = (name: string) => name.trim().split(/\s+/u).filter(Boolean)
+  .slice(0, 2).map((word) => Array.from(word)[0]?.toLocaleUpperCase() ?? '').join('') || '?';
+
 function ToolCard({ tool, selected, onToggle }: {
   tool: ComparisonTool;
   selected: boolean;
   onToggle: () => void;
 }) {
-  const [imageFailed, setImageFailed] = useState(false);
-  const showLogo = Boolean(tool.logo) && !imageFailed;
+  const [failedLogo, setFailedLogo] = useState<string | null>(null);
+  const id = useId();
+  const nameId = `${id}-name`;
+  const descriptionId = `${id}-description`;
+  const logo = localLogo(tool.logo);
+  const showLogo = Boolean(logo) && logo !== failedLogo;
+  const description = !showLogo || tool.logoKind === 'illustration'
+    ? 'ilustración no oficial'
+    : tool.logoKind === 'reference' ? 'símbolo de referencia' : null;
+  // Los recursos antiguos de Asana y monday son imágenes horizontales; las
+  // excepciones no se aplican a los iconos nuevos que los sustituyan.
+  const legacyClass = logo === '/brand/tools/asana.webp' ? ' tc-tool__brand--asana-legacy'
+    : logo === '/brand/tools/monday.png' ? ' tc-tool__brand--monday-legacy' : '';
 
   return (
     <button
       type="button"
       className={`tc-tool${selected ? ' tc-tool--selected' : ''}`}
       aria-pressed={selected}
+      aria-labelledby={nameId}
+      aria-describedby={description ? descriptionId : undefined}
       onClick={onToggle}
     >
       <span className="tc-tool__check" aria-hidden="true">{selected && <Check size={13} strokeWidth={3} />}</span>
-      {showLogo && (
-        <span className={`tc-tool__brand tc-tool__brand--${tool.id}`} aria-hidden="true">
-          <img src={tool.logo ?? undefined} alt="" onError={() => setImageFailed(true)} />
+      {showLogo ? (
+        <span className={`tc-tool__brand${legacyClass}`} aria-hidden="true">
+          <img src={logo ?? undefined} alt="" onError={() => setFailedLogo(logo)} />
         </span>
+      ) : (
+        <span className="tc-tool__brand tc-tool__brand--fallback" aria-hidden="true">{getInitials(tool.name)}</span>
       )}
-      <span className={`tc-tool__name${showLogo ? '' : ' tc-tool__name--fallback'}`}>{tool.name}</span>
+      <span id={nameId} className="tc-tool__name">{tool.name}{description && <span className="tc-tool__asterisk" aria-hidden="true">*</span>}</span>
+      {description && <span id={descriptionId} className="tc-sr-only">{description}</span>}
     </button>
   );
 }
@@ -179,6 +209,7 @@ export function ToolComparison() {
                 <button type="button" onClick={() => { setSearch(''); setCategory('all'); searchRef.current?.focus(); }}>Limpiar búsqueda y filtros</button>
               </div>
             )}
+            <p className="tc-symbol-note">* Símbolo de referencia o ilustrativo; no necesariamente es el logotipo oficial.</p>
           </div>
 
           <section className="tc-result" aria-labelledby={resultTitleId}>

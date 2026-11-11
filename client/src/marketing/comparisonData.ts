@@ -22,8 +22,10 @@ export interface ComparisonTool {
   name: string;
   category: ComparisonCategoryId;
   label: string;
-  /** Solo archivos oficiales o proporcionados; null utiliza el nombre. */
+  /** Ruta local de la imagen; null utiliza un distintivo genérico. */
   logo: string | null;
+  /** Clasificación del archivo, independiente de las capacidades del producto. */
+  logoKind?: 'official' | 'reference' | 'illustration';
   /** Relaciones propuestas internamente; no demuestran disponibilidad en berriq. */
   processIds: readonly string[];
   /** Evidencia independiente de cada pareja herramienta-proceso. */
@@ -69,57 +71,57 @@ export const comparisonCategories: readonly { id: ComparisonCategoryId; label: s
  * confirmadas. Las primeras 16 opciones visibles son el orden editorial solicitado.
  */
 export const comparisonTools: readonly ComparisonTool[] = [
-  { id: 'hubspot', name: 'HubSpot', category: 'clients-sales', label: 'Clientes y ventas', logo: null, processIds: ['sales-follow-up'], referenceVisible: true },
-  { id: 'salesforce', name: 'Salesforce', category: 'clients-sales', label: 'Seguimiento comercial', logo: null, processIds: ['sales-follow-up'], referenceVisible: true },
-  { id: 'pipedrive', name: 'Pipedrive', category: 'clients-sales', label: 'Seguimiento comercial', logo: null, processIds: ['sales-follow-up'], referenceVisible: true },
-  { id: 'zoho-crm', name: 'Zoho CRM', category: 'clients-sales', label: 'Gestión de clientes', logo: '/brand/tools/zoho-crm.png', processIds: ['sales-follow-up'], referenceVisible: true },
-  { id: 'freshsales', name: 'Freshsales', category: 'clients-sales', label: 'Seguimiento comercial', logo: null, processIds: ['sales-follow-up'], referenceVisible: true },
-  { id: 'monday-sales-crm', name: 'monday sales CRM', category: 'clients-sales', label: 'Seguimiento comercial', logo: '/brand/tools/monday.png', processIds: ['sales-follow-up'], referenceVisible: true },
+  { id: 'hubspot', name: 'HubSpot', category: 'clients-sales', label: 'Clientes y ventas', logo: '/brand/tools/reference-hubspot.svg', logoKind: 'reference', processIds: ['sales-follow-up'], referenceVisible: true },
+  { id: 'salesforce', name: 'Salesforce', category: 'clients-sales', label: 'Seguimiento comercial', logo: '/brand/tools/site-salesforce.png', logoKind: 'reference', processIds: ['sales-follow-up'], referenceVisible: true },
+  { id: 'pipedrive', name: 'Pipedrive', category: 'clients-sales', label: 'Seguimiento comercial', logo: '/brand/tools/reference-pipedrive.svg', logoKind: 'illustration', processIds: ['sales-follow-up'], referenceVisible: true },
+  { id: 'zoho-crm', name: 'Zoho CRM', category: 'clients-sales', label: 'Gestión de clientes', logo: '/brand/tools/zoho-crm.png', logoKind: 'official', processIds: ['sales-follow-up'], referenceVisible: true },
+  { id: 'freshsales', name: 'Freshsales', category: 'clients-sales', label: 'Seguimiento comercial', logo: '/brand/tools/reference-freshsales.svg', logoKind: 'illustration', processIds: ['sales-follow-up'], referenceVisible: true },
+  { id: 'monday-sales-crm', name: 'monday sales CRM', category: 'clients-sales', label: 'Seguimiento comercial', logo: '/brand/tools/monday.png', logoKind: 'reference', processIds: ['sales-follow-up'], referenceVisible: true },
 
-  { id: 'trello', name: 'Trello', category: 'tasks-coordination', label: 'Tareas y pendientes', logo: '/brand/tools/trello-icon.svg', processIds: ['task-coordination'], referenceVisible: true },
-  { id: 'asana', name: 'Asana', category: 'tasks-coordination', label: 'Coordinación del equipo', logo: '/brand/tools/asana.webp', processIds: ['task-coordination'], referenceVisible: true },
-  { id: 'monday-work-management', name: 'monday work management', category: 'tasks-coordination', label: 'Tareas y coordinación', logo: '/brand/tools/monday.png', processIds: ['task-coordination'], referenceVisible: true },
-  { id: 'clickup', name: 'ClickUp', category: 'tasks-coordination', label: 'Tareas y coordinación', logo: null, processIds: ['task-coordination'], referenceVisible: true },
-  { id: 'todoist', name: 'Todoist', category: 'tasks-coordination', label: 'Tareas y pendientes', logo: '/brand/tools/todoist-icon.svg', processIds: ['task-coordination'], referenceVisible: true },
-  { id: 'notion', name: 'Notion', category: 'tasks-coordination', label: 'Seguimiento de tareas', logo: null, processIds: ['task-coordination'], referenceVisible: true },
+  { id: 'trello', name: 'Trello', category: 'tasks-coordination', label: 'Tareas y pendientes', logo: '/brand/tools/trello-icon.svg', logoKind: 'official', processIds: ['task-coordination'], referenceVisible: true },
+  { id: 'asana', name: 'Asana', category: 'tasks-coordination', label: 'Coordinación del equipo', logo: '/brand/tools/asana.webp', logoKind: 'official', processIds: ['task-coordination'], referenceVisible: true },
+  { id: 'monday-work-management', name: 'monday work management', category: 'tasks-coordination', label: 'Tareas y coordinación', logo: '/brand/tools/monday.png', logoKind: 'reference', processIds: ['task-coordination'], referenceVisible: true },
+  { id: 'clickup', name: 'ClickUp', category: 'tasks-coordination', label: 'Tareas y coordinación', logo: '/brand/tools/reference-clickup.svg', logoKind: 'reference', processIds: ['task-coordination'], referenceVisible: true },
+  { id: 'todoist', name: 'Todoist', category: 'tasks-coordination', label: 'Tareas y pendientes', logo: '/brand/tools/todoist-icon.svg', logoKind: 'official', processIds: ['task-coordination'], referenceVisible: true },
+  { id: 'notion', name: 'Notion', category: 'tasks-coordination', label: 'Seguimiento de tareas', logo: '/brand/tools/reference-notion.svg', logoKind: 'reference', processIds: ['task-coordination'], referenceVisible: true },
 
-  { id: 'excel', name: 'Microsoft Excel', category: 'sheets-records', label: 'Control de cobros', logo: null, processIds: ['payment-follow-up'], referenceVisible: true },
-  { id: 'google-sheets', name: 'Google Sheets', category: 'sheets-records', label: 'Control de cobros', logo: null, processIds: ['payment-follow-up'], referenceVisible: true },
-  { id: 'airtable', name: 'Airtable', category: 'sheets-records', label: 'Seguimiento de tareas', logo: null, processIds: ['task-coordination'], referenceVisible: true },
+  { id: 'excel', name: 'Microsoft Excel', category: 'sheets-records', label: 'Control de cobros', logo: '/brand/tools/reference-excel.svg', logoKind: 'illustration', processIds: ['payment-follow-up'], referenceVisible: true },
+  { id: 'google-sheets', name: 'Google Sheets', category: 'sheets-records', label: 'Control de cobros', logo: '/brand/tools/reference-google-sheets.svg', logoKind: 'reference', processIds: ['payment-follow-up'], referenceVisible: true },
+  { id: 'airtable', name: 'Airtable', category: 'sheets-records', label: 'Seguimiento de tareas', logo: '/brand/tools/reference-airtable.svg', logoKind: 'reference', processIds: ['task-coordination'], referenceVisible: true },
 
-  { id: 'mindbody', name: 'Mindbody', category: 'memberships-subscriptions', label: 'Membresías y reservas', logo: null, processIds: ['memberships', 'booking'], referenceVisible: true },
+  { id: 'mindbody', name: 'Mindbody', category: 'memberships-subscriptions', label: 'Membresías y reservas', logo: '/brand/tools/reference-mindbody.svg', logoKind: 'illustration', processIds: ['memberships', 'booking'], referenceVisible: true },
 
-  { id: 'calendly', name: 'Calendly', category: 'appointments-bookings', label: 'Citas y disponibilidad', logo: null, processIds: ['booking'], referenceVisible: true },
-  { id: 'acuity-scheduling', name: 'Acuity Scheduling', category: 'appointments-bookings', label: 'Citas y reservas', logo: null, processIds: ['booking'], referenceVisible: true },
-  { id: 'simplybook-me', name: 'SimplyBook.me', category: 'appointments-bookings', label: 'Citas y reservas', logo: null, processIds: ['booking'], referenceVisible: true },
-  { id: 'zoho-bookings', name: 'Zoho Bookings', category: 'appointments-bookings', label: 'Citas y reservas', logo: null, processIds: ['booking'], referenceVisible: true },
-  { id: 'skedda', name: 'Skedda', category: 'appointments-bookings', label: 'Reservas de espacios', logo: null, processIds: ['booking'], referenceVisible: true },
+  { id: 'calendly', name: 'Calendly', category: 'appointments-bookings', label: 'Citas y disponibilidad', logo: '/brand/tools/reference-calendly.svg', logoKind: 'reference', processIds: ['booking'], referenceVisible: true },
+  { id: 'acuity-scheduling', name: 'Acuity Scheduling', category: 'appointments-bookings', label: 'Citas y reservas', logo: '/brand/tools/site-acuity-scheduling.png', logoKind: 'reference', processIds: ['booking'], referenceVisible: true },
+  { id: 'simplybook-me', name: 'SimplyBook.me', category: 'appointments-bookings', label: 'Citas y reservas', logo: '/brand/tools/site-simplybook-me.png', logoKind: 'reference', processIds: ['booking'], referenceVisible: true },
+  { id: 'zoho-bookings', name: 'Zoho Bookings', category: 'appointments-bookings', label: 'Citas y reservas', logo: '/brand/tools/zoho-bookings.png', logoKind: 'official', processIds: ['booking'], referenceVisible: true },
+  { id: 'skedda', name: 'Skedda', category: 'appointments-bookings', label: 'Reservas de espacios', logo: '/brand/tools/site-skedda.png', logoKind: 'reference', processIds: ['booking'], referenceVisible: true },
 
-  { id: 'glofox', name: 'Glofox', category: 'memberships-subscriptions', label: 'Membresías y reservas', logo: null, processIds: ['memberships', 'booking'], referenceVisible: true },
-  { id: 'gymdesk', name: 'Gymdesk', category: 'memberships-subscriptions', label: 'Membresías', logo: null, processIds: ['memberships'], referenceVisible: true },
-  { id: 'wildapricot', name: 'WildApricot', category: 'memberships-subscriptions', label: 'Membresías', logo: null, processIds: ['memberships'], referenceVisible: true },
-  { id: 'zoho-billing', name: 'Zoho Billing', category: 'memberships-subscriptions', label: 'Suscripciones y cobros', logo: null, processIds: ['memberships', 'payment-follow-up'], referenceVisible: true },
+  { id: 'glofox', name: 'Glofox', category: 'memberships-subscriptions', label: 'Membresías y reservas', logo: '/brand/tools/site-glofox.png', logoKind: 'reference', processIds: ['memberships', 'booking'], referenceVisible: true },
+  { id: 'gymdesk', name: 'Gymdesk', category: 'memberships-subscriptions', label: 'Membresías', logo: '/brand/tools/reference-gymdesk.svg', logoKind: 'illustration', processIds: ['memberships'], referenceVisible: true },
+  { id: 'wildapricot', name: 'WildApricot', category: 'memberships-subscriptions', label: 'Membresías', logo: '/brand/tools/reference-wildapricot.svg', logoKind: 'illustration', processIds: ['memberships'], referenceVisible: true },
+  { id: 'zoho-billing', name: 'Zoho Billing', category: 'memberships-subscriptions', label: 'Suscripciones y cobros', logo: '/brand/tools/zoho-billing.png', logoKind: 'reference', processIds: ['memberships', 'payment-follow-up'], referenceVisible: true },
 
-  { id: 'shopify', name: 'Shopify', category: 'commerce-inventory', label: 'Catálogo y pedidos', logo: null, processIds: ['catalog-orders', 'inventory'], referenceVisible: true },
-  { id: 'woocommerce', name: 'WooCommerce', category: 'commerce-inventory', label: 'Catálogo y pedidos', logo: null, processIds: ['catalog-orders', 'inventory'], referenceVisible: true },
-  { id: 'zoho-inventory', name: 'Zoho Inventory', category: 'commerce-inventory', label: 'Inventario', logo: null, processIds: ['inventory'], referenceVisible: true },
-  { id: 'inflow-inventory', name: 'inFlow Inventory', category: 'commerce-inventory', label: 'Inventario', logo: null, processIds: ['inventory'], referenceVisible: true },
+  { id: 'shopify', name: 'Shopify', category: 'commerce-inventory', label: 'Catálogo y pedidos', logo: '/brand/tools/reference-shopify.svg', logoKind: 'reference', processIds: ['catalog-orders', 'inventory'], referenceVisible: true },
+  { id: 'woocommerce', name: 'WooCommerce', category: 'commerce-inventory', label: 'Catálogo y pedidos', logo: '/brand/tools/reference-woocommerce.svg', logoKind: 'reference', processIds: ['catalog-orders', 'inventory'], referenceVisible: true },
+  { id: 'zoho-inventory', name: 'Zoho Inventory', category: 'commerce-inventory', label: 'Inventario', logo: '/brand/tools/zoho-inventory.png', logoKind: 'official', processIds: ['inventory'], referenceVisible: true },
+  { id: 'inflow-inventory', name: 'inFlow Inventory', category: 'commerce-inventory', label: 'Inventario', logo: '/brand/tools/site-inflow-inventory.png', logoKind: 'reference', processIds: ['inventory'], referenceVisible: true },
 
-  { id: 'factorial', name: 'Factorial', category: 'staff-recruitment', label: 'Gestión de personal', logo: null, processIds: ['employee-records'], referenceVisible: true },
-  { id: 'bamboohr', name: 'BambooHR', category: 'staff-recruitment', label: 'Gestión de personal', logo: null, processIds: ['employee-records'], referenceVisible: true },
-  { id: 'zoho-people', name: 'Zoho People', category: 'staff-recruitment', label: 'Gestión de personal', logo: null, processIds: ['employee-records'], referenceVisible: true },
-  { id: 'zoho-recruit', name: 'Zoho Recruit', category: 'staff-recruitment', label: 'Reclutamiento', logo: null, processIds: ['recruitment'], referenceVisible: true },
-  { id: 'workable', name: 'Workable', category: 'staff-recruitment', label: 'Reclutamiento', logo: null, processIds: ['recruitment'], referenceVisible: true },
+  { id: 'factorial', name: 'Factorial', category: 'staff-recruitment', label: 'Gestión de personal', logo: '/brand/tools/reference-factorial.svg', logoKind: 'illustration', processIds: ['employee-records'], referenceVisible: true },
+  { id: 'bamboohr', name: 'BambooHR', category: 'staff-recruitment', label: 'Gestión de personal', logo: '/brand/tools/site-bamboohr.png', logoKind: 'reference', processIds: ['employee-records'], referenceVisible: true },
+  { id: 'zoho-people', name: 'Zoho People', category: 'staff-recruitment', label: 'Gestión de personal', logo: '/brand/tools/zoho-people.png', logoKind: 'official', processIds: ['employee-records'], referenceVisible: true },
+  { id: 'zoho-recruit', name: 'Zoho Recruit', category: 'staff-recruitment', label: 'Reclutamiento', logo: '/brand/tools/zoho-recruit.png', logoKind: 'official', processIds: ['recruitment'], referenceVisible: true },
+  { id: 'workable', name: 'Workable', category: 'staff-recruitment', label: 'Reclutamiento', logo: '/brand/tools/site-workable.png', logoKind: 'reference', processIds: ['recruitment'], referenceVisible: true },
 
-  { id: 'zoho-invoice', name: 'Zoho Invoice', category: 'invoicing-expenses', label: 'Facturación y cobros', logo: null, processIds: ['payment-follow-up'], referenceVisible: true },
-  { id: 'freshbooks', name: 'FreshBooks', category: 'invoicing-expenses', label: 'Facturación y cobros', logo: null, processIds: ['payment-follow-up'], referenceVisible: true },
-  { id: 'expensify', name: 'Expensify', category: 'invoicing-expenses', label: 'Gastos', logo: null, processIds: [], referenceVisible: true },
+  { id: 'zoho-invoice', name: 'Zoho Invoice', category: 'invoicing-expenses', label: 'Facturación y cobros', logo: '/brand/tools/zoho-invoice.png', logoKind: 'official', processIds: ['payment-follow-up'], referenceVisible: true },
+  { id: 'freshbooks', name: 'FreshBooks', category: 'invoicing-expenses', label: 'Facturación y cobros', logo: '/brand/tools/site-freshbooks.png', logoKind: 'reference', processIds: ['payment-follow-up'], referenceVisible: true },
+  { id: 'expensify', name: 'Expensify', category: 'invoicing-expenses', label: 'Gastos', logo: '/brand/tools/reference-expensify.svg', logoKind: 'reference', processIds: [], referenceVisible: true },
 
   // Solo una comprobación específica de firma electrónica puede habilitar estas
   // referencias; guardar o generar contratos no es equivalente a firmarlos.
-  { id: 'docusign', name: 'DocuSign', category: 'contracts-signature', label: 'Firma electrónica', logo: null, processIds: ['electronic-signature'], referenceVisible: false },
-  { id: 'dropbox-sign', name: 'Dropbox Sign', category: 'contracts-signature', label: 'Firma electrónica', logo: null, processIds: ['electronic-signature'], referenceVisible: false },
-  { id: 'pandadoc', name: 'PandaDoc', category: 'contracts-signature', label: 'Firma electrónica', logo: null, processIds: ['electronic-signature'], referenceVisible: false },
+  { id: 'docusign', name: 'DocuSign', category: 'contracts-signature', label: 'Firma electrónica', logo: '/brand/tools/site-docusign.png', logoKind: 'reference', processIds: ['electronic-signature'], referenceVisible: false },
+  { id: 'dropbox-sign', name: 'Dropbox Sign', category: 'contracts-signature', label: 'Firma electrónica', logo: '/brand/tools/reference-dropbox-sign.svg', logoKind: 'illustration', processIds: ['electronic-signature'], referenceVisible: false },
+  { id: 'pandadoc', name: 'PandaDoc', category: 'contracts-signature', label: 'Firma electrónica', logo: '/brand/tools/reference-pandadoc.svg', logoKind: 'illustration', processIds: ['electronic-signature'], referenceVisible: false },
 ];
 
 /**

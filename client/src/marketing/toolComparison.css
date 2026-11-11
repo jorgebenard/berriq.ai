@@ -141,12 +141,14 @@
 .tc-tool--selected .tc-tool__check { border-color: #6d3df5; background: #6d3df5; }
 .tc-tool__brand { display: flex; width: 40px; height: 40px; flex: none; align-items: center; justify-content: center; }
 .tc-tool__brand img { display: block; width: auto; height: auto; max-width: 40px; max-height: 40px; object-fit: contain; }
-.tc-tool__brand--monday-sales-crm, .tc-tool__brand--monday-work-management { width: min(76px, 100%); }
-.tc-tool__brand--monday-sales-crm img, .tc-tool__brand--monday-work-management img { max-width: 100%; }
-.tc-tool__brand--asana { width: min(76px, 100%); overflow: hidden; }
-.tc-tool__brand--asana img { flex: none; width: 118px; max-width: none; max-height: none; }
+.tc-tool__brand--fallback { border: 1px solid #ddd4f0; border-radius: 11px; color: #563b91; background: #f0ecf9; font-size: 14px; font-weight: 800; letter-spacing: .02em; line-height: 1; }
+.tc-tool__brand--asana-legacy, .tc-tool__brand--monday-legacy { position: relative; overflow: hidden; }
+.tc-tool__brand--asana-legacy img, .tc-tool__brand--monday-legacy img { position: absolute; top: 50%; max-width: none; max-height: none; transform: translateY(-50%); }
+.tc-tool__brand--asana-legacy img { left: -96px; width: 378px; }
+.tc-tool__brand--monday-legacy img { left: 0; width: 216px; }
 .tc-tool__name { max-width: 100%; color: #211b31; font-size: 11px; font-weight: 750; line-height: 1.25; overflow-wrap: anywhere; }
-.tc-tool__name--fallback { font-size: 12px; }
+.tc-tool__asterisk { margin-left: 2px; color: #6a48a5; }
+.tc-symbol-note { margin: 12px 0 0; color: #625b70; font-size: 12px; line-height: 1.5; }
 .tc-expand, .tc-no-results button {
   display: inline-flex;
   min-height: 44px;

@@ -1,0 +1,282 @@
+[
+  {
+    "id": "hubspot",
+    "path": "/brand/tools/reference-hubspot.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/hubspot.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "salesforce",
+    "path": "/brand/tools/site-salesforce.png",
+    "kind": "reference",
+    "source": "https://www.salesforce.com/etc/designs/sfdc-www/en_us/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "pipedrive",
+    "path": "/brand/tools/reference-pipedrive.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "zoho-crm",
+    "path": "/brand/tools/zoho-crm.png",
+    "kind": "official",
+    "source": "https://www.zoho.com/branding-kit.html; product-icons.zip, icons (12)/crm-512.png",
+    "note": "Icono oficial de Zoho CRM existente, conservado sin cambios."
+  },
+  {
+    "id": "freshsales",
+    "path": "/brand/tools/reference-freshsales.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "monday-sales-crm",
+    "path": "/brand/tools/monday.png",
+    "kind": "reference",
+    "source": "https://monday.com/newsroom/press-kit/logos",
+    "note": "Logotipo oficial genérico de monday.com ya existente, conservado sin cambios; referencia a la marca matriz, no un icono específico del producto."
+  },
+  {
+    "id": "trello",
+    "path": "/brand/tools/trello-icon.svg",
+    "kind": "official",
+    "source": "https://www.trello.com/about; Trello_Logo_assets.zip, Trello Logo assets/SVG/Mark/trello-icon-gradient-blue.svg",
+    "note": "Icono oficial de Trello existente, conservado sin cambios."
+  },
+  {
+    "id": "asana",
+    "path": "/brand/tools/asana.webp",
+    "kind": "official",
+    "source": "https://asana.com/brand",
+    "note": "Recurso oficial de Asana existente, conservado sin cambios; incluye símbolo y nombre, con su fondo y proporciones originales."
+  },
+  {
+    "id": "monday-work-management",
+    "path": "/brand/tools/monday.png",
+    "kind": "reference",
+    "source": "https://monday.com/newsroom/press-kit/logos",
+    "note": "Logotipo oficial genérico de monday.com ya existente, conservado sin cambios; referencia a la marca matriz, no un icono específico del producto."
+  },
+  {
+    "id": "clickup",
+    "path": "/brand/tools/reference-clickup.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/clickup.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "todoist",
+    "path": "/brand/tools/todoist-icon.svg",
+    "kind": "official",
+    "source": "https://www.todoist.com/press; todoist-logo.zip, todoist-logo/Icon/Color.svg",
+    "note": "Icono oficial de Todoist existente, conservado sin cambios."
+  },
+  {
+    "id": "notion",
+    "path": "/brand/tools/reference-notion.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/notion.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "excel",
+    "path": "/brand/tools/reference-excel.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "google-sheets",
+    "path": "/brand/tools/reference-google-sheets.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/googlesheets.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "airtable",
+    "path": "/brand/tools/reference-airtable.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/airtable.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "mindbody",
+    "path": "/brand/tools/reference-mindbody.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "calendly",
+    "path": "/brand/tools/reference-calendly.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/calendly.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "acuity-scheduling",
+    "path": "/brand/tools/site-acuity-scheduling.png",
+    "kind": "reference",
+    "source": "https://acuityscheduling.com/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "simplybook-me",
+    "path": "/brand/tools/site-simplybook-me.png",
+    "kind": "reference",
+    "source": "https://simplybook.me/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "zoho-bookings",
+    "path": "/brand/tools/zoho-bookings.png",
+    "kind": "official",
+    "source": "https://www.zoho.com/branding-kit.html; product-icons.zip, icons (12)/bookings-512.png",
+    "note": "Icono oficial del producto homónimo, extraído del kit y redimensionado proporcionalmente de 512 a 40 px, con transparencia."
+  },
+  {
+    "id": "skedda",
+    "path": "/brand/tools/site-skedda.png",
+    "kind": "reference",
+    "source": "https://www.skedda.com/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "glofox",
+    "path": "/brand/tools/site-glofox.png",
+    "kind": "reference",
+    "source": "https://glofox.com/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "gymdesk",
+    "path": "/brand/tools/reference-gymdesk.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "wildapricot",
+    "path": "/brand/tools/reference-wildapricot.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "zoho-billing",
+    "path": "/brand/tools/zoho-billing.png",
+    "kind": "reference",
+    "source": "https://www.zoho.com/branding-kit.html; product-icons.zip, icons (12)/subscriptions-512.png",
+    "note": "Icono histórico oficial de Zoho Subscriptions, nombre anterior de Zoho Billing; se usa únicamente como referencia, no como icono oficial actual de Billing. Redimensionado proporcionalmente de 512 a 40 px."
+  },
+  {
+    "id": "shopify",
+    "path": "/brand/tools/reference-shopify.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/shopify.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "woocommerce",
+    "path": "/brand/tools/reference-woocommerce.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/woocommerce.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "zoho-inventory",
+    "path": "/brand/tools/zoho-inventory.png",
+    "kind": "official",
+    "source": "https://www.zoho.com/branding-kit.html; product-icons.zip, icons (12)/inventory-512.png",
+    "note": "Icono oficial del producto homónimo, extraído del kit y redimensionado proporcionalmente de 512 a 40 px, con transparencia."
+  },
+  {
+    "id": "inflow-inventory",
+    "path": "/brand/tools/site-inflow-inventory.png",
+    "kind": "reference",
+    "source": "https://www.inflowinventory.com/wp-content/uploads/2019/10/apple-touch-icon.png",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "factorial",
+    "path": "/brand/tools/reference-factorial.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "bamboohr",
+    "path": "/brand/tools/site-bamboohr.png",
+    "kind": "reference",
+    "source": "https://www.bamboohr.com/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "zoho-people",
+    "path": "/brand/tools/zoho-people.png",
+    "kind": "official",
+    "source": "https://www.zoho.com/branding-kit.html; product-icons.zip, icons (12)/people-512.png",
+    "note": "Icono oficial del producto homónimo, extraído del kit y redimensionado proporcionalmente de 512 a 40 px, con transparencia."
+  },
+  {
+    "id": "zoho-recruit",
+    "path": "/brand/tools/zoho-recruit.png",
+    "kind": "official",
+    "source": "https://www.zoho.com/branding-kit.html; product-icons.zip, icons (12)/recruit-512.png",
+    "note": "Icono oficial del producto homónimo, extraído del kit y redimensionado proporcionalmente de 512 a 40 px, con transparencia."
+  },
+  {
+    "id": "workable",
+    "path": "/brand/tools/site-workable.png",
+    "kind": "reference",
+    "source": "https://workable.com/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "zoho-invoice",
+    "path": "/brand/tools/zoho-invoice.png",
+    "kind": "official",
+    "source": "https://www.zoho.com/branding-kit.html; product-icons.zip, icons (12)/invoice-512.png",
+    "note": "Icono oficial del producto homónimo, extraído del kit y redimensionado proporcionalmente de 512 a 40 px, con transparencia."
+  },
+  {
+    "id": "freshbooks",
+    "path": "/brand/tools/site-freshbooks.png",
+    "kind": "reference",
+    "source": "https://www.freshbooks.com/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "expensify",
+    "path": "/brand/tools/reference-expensify.svg",
+    "kind": "reference",
+    "source": "Paquete npm simple-icons@16.37.0, icons/expensify.svg; https://simpleicons.org/",
+    "note": "SVG de la colección de terceros Simple Icons, coloreado con su paleta; no se declara archivo oficial ni autorización. Revisar condiciones de marca antes de publicar."
+  },
+  {
+    "id": "docusign",
+    "path": "/brand/tools/site-docusign.png",
+    "kind": "reference",
+    "source": "https://www.docusign.com/favicon.ico",
+    "note": "Favicon del sitio de la marca, convertido localmente a PNG con lienzo transparente de 40×40 px. Referencia; verificar condiciones de uso, sin implicar autorización ni afiliación."
+  },
+  {
+    "id": "dropbox-sign",
+    "path": "/brand/tools/reference-dropbox-sign.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  },
+  {
+    "id": "pandadoc",
+    "path": "/brand/tools/reference-pandadoc.svg",
+    "kind": "illustration",
+    "source": "Ilustración vectorial local original: iniciales y colores aproximados.",
+    "note": "No oficial: no reproduce un logotipo exacto ni implica afiliación o autorización. Revisar marca y condiciones antes de publicar."
+  }
+]
